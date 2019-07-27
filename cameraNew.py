@@ -145,33 +145,3 @@ while 1:
 
         
         
-        
-'''
-mask2 = cv.inRange(hsv, np.array([2, 50, 60]), np.array([25, 150, 255]))
-    res = cv.bitwise_and(frame, frame, mask=mask2)
-    gray = cv.cvtColor(res, cv.COLOR_BGR2GRAY)
-    median = cv.GaussianBlur(gray, (5, 5), 0)
-    kernel_square = np.ones((5, 5), np.uint8)
-    dilation = cv.dilate(median, kernel_square, iterations=2)
-    #frame_HSV = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
-    #frame_threshold = cv.inRange(frame_HSV, (low_H, low_S, low_V), (high_H, high_S, high_V))
-    opening=cv.morphologyEx(dilation,cv.MORPH_CLOSE,kernel_square)
-    ret, thresh = cv.threshold(opening, 30, 255, cv.THRESH_BINARY)
-    thresh = thresh[y:y + h, x:x + w]
-   
-    contours = cv.findContours(thresh.copy(), cv.RETR_TREE, cv.CHAIN_APPROX_NONE)[1]
-    if len(contours)>0:
-        contour = max(contours, key=cv.contourArea)
-        if cv.contourArea(contour) > 10000:
-            x1, y1, w1, h1 = cv.boundingRect(contour)
-            save_img = thresh[y1:y1 + h1, x1:x1 + w1]
-            if w1 > h1:
-                save_img = cv.copyMakeBorder(save_img, int((w1 - h1) / 2), int((w1 - h1) / 2), 0, 0,
-                                                  cv.BORDER_CONSTANT, (0, 0, 0))
-            elif h1 > w1:
-                save_img = cv.copyMakeBorder(save_img, 0, 0, int((h1 - w1) / 2), int((h1 - w1) / 2),
-                                                  cv.BORDER_CONSTANT, (0, 0, 0))
-        save_img = cv.resize(save_img, (50, 50))
-        cv.putText(frame, "Capturing...", (30, 60), cv.FONT_HERSHEY_TRIPLEX, 2, (127, 255, 255))
-    
-'''
